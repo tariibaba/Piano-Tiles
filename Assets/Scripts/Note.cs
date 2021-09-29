@@ -42,7 +42,6 @@ public class Note : MonoBehaviour
                 Played = true;
                 GameController.Instance.LastPlayedNoteId = Id;
                 animator.Play("Played");
-                print($"Node id: {Id}");
             }
         }
         else
