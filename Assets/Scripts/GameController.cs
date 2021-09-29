@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,9 @@ public class GameController : MonoBehaviour
     public const float NotesToSpawn = 20;
     private int prevRandomIndex = -1;
     public static GameController Instance { get; private set; }
+    public Transform noteContainer;
+    public ReactiveProperty<bool> GameStarted { get; set; }
+    public ReactiveProperty<bool> GameOver { get; set; }
 
     private void Awake()
     {
@@ -23,6 +27,8 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        GameStarted = new ReactiveProperty<bool>(true);
+        GameOver = new ReactiveProperty<bool>();
         SetDataForNoteGeneration();
         SpawnNotes();
     }
@@ -44,7 +50,7 @@ public class GameController : MonoBehaviour
                 if (gameObject.CompareTag("Note"))
                 {
                     var note = gameObject.GetComponent<Note>();
-                    note.Played();
+                    note.Play();
                 }
             }
         }
@@ -78,10 +84,10 @@ public class GameController : MonoBehaviour
             var randomIndex = GetRandomIndex();
             for (int j = 0; j < 4; j++)
             {
-                note = Instantiate(notePrefab);
+                note = Instantiate(notePrefab, noteContainer.transform);
                 note.transform.localScale = noteLocalScale;
                 note.transform.position = new Vector2(noteSpawnStartPosX + noteWidth * j, noteSpawnStartPosY);
-                note.GetComponent<SpriteRenderer>().enabled = (j == randomIndex);
+                note.Visible = (j == randomIndex);
             }
             noteSpawnStartPosY += noteHeight;
             if (i == NotesToSpawn - 1) lastSpawnedNote = note.transform;

@@ -6,18 +6,55 @@ public class Note : MonoBehaviour
 {
     Animator animator;
 
-    void Start()
+    private bool visible;
+    public bool Visible
+    {
+        get => visible;
+        set
+        {
+            visible = value;
+            if (!visible) animator.Play("Invisible");
+        }
+    }
+
+    public bool Played { get; set; }
+
+    private void Awake()
     {
         animator = GetComponent<Animator>();
     }
 
-    void Update()
+    private void Update()
     {
-        transform.Translate(Vector2.down * GameController.Instance.noteSpeed * Time.deltaTime);
+        if (GameController.Instance.GameStarted.Value && !GameController.Instance.GameOver.Value)
+        {
+            transform.Translate(Vector2.down * GameController.Instance.noteSpeed * Time.deltaTime);
+        }
     }
 
-    public void Played()
+    public void Play()
     {
-        animator.Play("Played");
+        if (Visible)
+        {
+            if (!Played)
+            {
+                Played = true;
+                animator.Play("Played");
+            }
+        }
+        else
+        {
+            GameController.Instance.GameOver.Value = true;
+            animator.Play("Missed");
+        }
+    }
+
+    public void OutOfScreen()
+    {
+        if (Visible && !Played)
+        {
+            GameController.Instance.GameOver.Value = true;
+            animator.Play("Missed");
+        }
     }
 }
