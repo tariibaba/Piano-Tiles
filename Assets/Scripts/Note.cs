@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Note : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Animator animator;
+
     void Start()
     {
-        
+        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector2.down * GameController.Instance.noteSpeed * Time.deltaTime);
+    }
+
+    public void Played()
+    {
+        animator.Play("Played");
     }
 }

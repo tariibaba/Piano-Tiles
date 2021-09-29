@@ -27,6 +27,29 @@ public class GameController : MonoBehaviour
         SpawnNotes();
     }
 
+    private void Update()
+    {
+        DetectNoteClicks();
+    }
+
+    private void DetectNoteClicks()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            var origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var hit = Physics2D.Raycast(origin, Vector2.zero);
+            if (hit)
+            {
+                var gameObject = hit.collider.gameObject;
+                if (gameObject.CompareTag("Note"))
+                {
+                    var note = gameObject.GetComponent<Note>();
+                    note.Played();
+                }
+            }
+        }
+    }
+
 
     private void SetDataForNoteGeneration()
     {

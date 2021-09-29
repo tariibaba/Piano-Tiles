@@ -523,6 +523,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 488409528093874389, guid: cc5784239cd157a409348feda7deac8b, type: 3}
+      propertyPath: m_TagString
+      value: Note
+      objectReference: {fileID: 0}
+    - target: {fileID: 488409528093874391, guid: cc5784239cd157a409348feda7deac8b, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 488409528093874391, guid: cc5784239cd157a409348feda7deac8b, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 488409528093874391, guid: cc5784239cd157a409348feda7deac8b, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 488409528093874391, guid: cc5784239cd157a409348feda7deac8b, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 488409528093874392, guid: cc5784239cd157a409348feda7deac8b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.103
