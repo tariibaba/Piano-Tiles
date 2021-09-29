@@ -18,6 +18,7 @@ public class Note : MonoBehaviour
     }
 
     public bool Played { get; set; }
+    public int Id { get; set; }
 
     private void Awake()
     {
@@ -36,10 +37,12 @@ public class Note : MonoBehaviour
     {
         if (Visible)
         {
-            if (!Played)
+            if (!Played && GameController.Instance.LastPlayedNoteId == Id - 1)
             {
                 Played = true;
+                GameController.Instance.LastPlayedNoteId = Id;
                 animator.Play("Played");
+                print($"Node id: {Id}");
             }
         }
         else

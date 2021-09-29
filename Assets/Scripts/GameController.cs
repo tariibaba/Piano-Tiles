@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour
     public Transform noteContainer;
     public ReactiveProperty<bool> GameStarted { get; set; }
     public ReactiveProperty<bool> GameOver { get; set; }
+    private int lastNoteId = 1;
+    public int LastPlayedNoteId { get; set; } = 0;
 
     private void Awake()
     {
@@ -88,6 +90,11 @@ public class GameController : MonoBehaviour
                 note.transform.localScale = noteLocalScale;
                 note.transform.position = new Vector2(noteSpawnStartPosX + noteWidth * j, noteSpawnStartPosY);
                 note.Visible = (j == randomIndex);
+                if (note.Visible)
+                {
+                    note.Id = lastNoteId;
+                    lastNoteId++;
+                }
             }
             noteSpawnStartPosY += noteHeight;
             if (i == NotesToSpawn - 1) lastSpawnedNote = note.transform;
