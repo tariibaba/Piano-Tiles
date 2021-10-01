@@ -71,7 +71,7 @@ public class GameController : MonoBehaviour
         var bottomLeftWorldPoint = Camera.main.ScreenToWorldPoint(Vector3.zero);
         var screenWidth = topRightWorldPoint.x - bottomLeftWorldPoint.x;
         var screenHeight = topRightWorldPoint.y - bottomLeftWorldPoint.y;
-        noteHeight = screenHeight / 3;
+        noteHeight = screenHeight / 4;
         noteWidth = screenWidth / 4;
         var noteSpriteRenderer = notePrefab.GetComponent<SpriteRenderer>();
         noteLocalScale = new Vector3(
