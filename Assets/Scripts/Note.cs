@@ -43,13 +43,14 @@ public class Note : MonoBehaviour
                 {
                     Played = true;
                     GameController.Instance.LastPlayedNoteId = Id;
+                    GameController.Instance.Score.Value++;
                     GameController.Instance.PlaySomeOfSong();
                     animator.Play("Played");
                 }
             }
             else
             {
-                GameController.Instance.GameOver.Value = true;
+                StartCoroutine(GameController.Instance.EndGame());
                 animator.Play("Missed");
             }
         }
@@ -59,7 +60,7 @@ public class Note : MonoBehaviour
     {
         if (Visible && !Played)
         {
-            GameController.Instance.GameOver.Value = true;
+            StartCoroutine(GameController.Instance.EndGame());
             animator.Play("Missed");
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class GameController : MonoBehaviour
     public Transform noteContainer;
     public ReactiveProperty<bool> GameStarted { get; set; }
     public ReactiveProperty<bool> GameOver { get; set; }
+    public ReactiveProperty<int> Score { get; set; }
     private int lastNoteId = 1;
     public int LastPlayedNoteId { get; set; } = 0;
     public AudioSource audioSource;
@@ -26,12 +28,16 @@ public class GameController : MonoBehaviour
     private float songSegmentLength = 0.8f;
     private bool lastNote = false;
     private bool lastSpawn = false;
+    public ReactiveProperty<bool> ShowGameOverScreen { get; set; }
+    public bool PlayerWon { get; set; } = false;
 
     private void Awake()
     {
         Instance = this;
         GameStarted = new ReactiveProperty<bool>();
         GameOver = new ReactiveProperty<bool>();
+        Score = new ReactiveProperty<int>();
+        ShowGameOverScreen = new ReactiveProperty<bool>();
     }
 
     void Start()
@@ -150,5 +156,22 @@ public class GameController : MonoBehaviour
     {
         yield return new WaitForSeconds(songSegmentLength);
         audioSource.Pause();
+        if (lastNote)
+        {
+            PlayerWon = true;
+            StartCoroutine(EndGame());
+        }
+    }
+
+    public void PlayAgain()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator EndGame()
+    {
+        GameOver.Value = true;
+        yield return new WaitForSeconds(1);
+        ShowGameOverScreen.Value = true;
     }
 }
