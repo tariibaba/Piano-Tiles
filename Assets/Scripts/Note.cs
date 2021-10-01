@@ -41,6 +41,7 @@ public class Note : MonoBehaviour
             {
                 Played = true;
                 GameController.Instance.LastPlayedNoteId = Id;
+                GameController.Instance.PlaySomeOfSong();
                 animator.Play("Played");
             }
         }

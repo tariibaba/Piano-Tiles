@@ -12,8 +12,8 @@ public class GameController : MonoBehaviour
     public Note notePrefab;
     private Vector3 noteLocalScale;
     private float noteSpawnStartPosX;
-    public float noteSpeed = 3f;
-    public const float NotesToSpawn = 20;
+    public float noteSpeed = 5f;
+    public const int NotesToSpawn = 20;
     private int prevRandomIndex = -1;
     public static GameController Instance { get; private set; }
     public Transform noteContainer;
@@ -21,6 +21,11 @@ public class GameController : MonoBehaviour
     public ReactiveProperty<bool> GameOver { get; set; }
     private int lastNoteId = 1;
     public int LastPlayedNoteId { get; set; } = 0;
+    public AudioSource audioSource;
+    private Coroutine playSongSegmentCoroutine;
+    private float songSegmentLength = 0.8f;
+    private bool lastNote = false;
+    private bool lastSpawn = false;
 
     private void Awake()
     {
@@ -79,9 +84,18 @@ public class GameController : MonoBehaviour
 
     public void SpawnNotes()
     {
+        if (lastSpawn) return;
+
         var noteSpawnStartPosY = lastSpawnedNote.position.y + noteHeight;
         Note note = null;
-        for (int i = 0; i < NotesToSpawn; i++)
+        var timeTillEnd = audioSource.clip.length - audioSource.time;
+        int notesToSpawn = NotesToSpawn;
+        if (timeTillEnd < NotesToSpawn)
+        {
+            notesToSpawn = Mathf.CeilToInt(timeTillEnd);
+            lastSpawn = true;
+        }
+        for (int i = 0; i < notesToSpawn; i++)
         {
             var randomIndex = GetRandomIndex();
             for (int j = 0; j < 4; j++)
@@ -107,5 +121,25 @@ public class GameController : MonoBehaviour
         while (randomIndex == prevRandomIndex) randomIndex = Random.Range(0, 4);
         prevRandomIndex = randomIndex;
         return randomIndex;
+    }
+
+    public void PlaySomeOfSong()
+    {
+        if (!audioSource.isPlaying && !lastNote)
+        {
+            audioSource.Play();
+        }
+        if (audioSource.clip.length - audioSource.time <= songSegmentLength)
+        {
+            lastNote = true;
+        }
+        if (playSongSegmentCoroutine != null) StopCoroutine(playSongSegmentCoroutine);
+        playSongSegmentCoroutine = StartCoroutine(PlaySomeOfSongCoroutine());
+    }
+
+    private IEnumerator PlaySomeOfSongCoroutine()
+    {
+        yield return new WaitForSeconds(songSegmentLength);
+        audioSource.Pause();
     }
 }
