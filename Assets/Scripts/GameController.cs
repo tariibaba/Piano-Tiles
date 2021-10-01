@@ -30,12 +30,12 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        GameStarted = new ReactiveProperty<bool>();
+        GameOver = new ReactiveProperty<bool>();
     }
 
     void Start()
     {
-        GameStarted = new ReactiveProperty<bool>(true);
-        GameOver = new ReactiveProperty<bool>();
         SetDataForNoteGeneration();
         SpawnNotes();
     }
@@ -43,6 +43,15 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         DetectNoteClicks();
+        DetectStart();
+    }
+
+    private void DetectStart()
+    {
+        if (!GameController.Instance.GameStarted.Value && Input.GetMouseButtonDown(0))
+        {
+            GameController.Instance.GameStarted.Value = true;
+        }
     }
 
     private void DetectNoteClicks()
